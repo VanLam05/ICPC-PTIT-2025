@@ -48,7 +48,7 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 #define gcd(a, b) __gcd(a, b)
 #endif
 
-// #define int ll
+#define int ll
 
 const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
@@ -63,13 +63,31 @@ inline void _VanLam_()
     int n;
     cin >> n;
     vpi a(n);
+    int res = 0;
+    map<pii, int> mp;
+    int pre = INF;
     FOR(i, 0, n - 1)
     {
         cin >> a[i].fi >> a[i].se;
+        pre = min(pre, a[i].fi);
+        res += a[i].se;
+        mp[{a[i].fi, -1}]++;
+        mp[{a[i].fi + a[i].se, 1}]++;
     }
-    sort(a.begin() + 1, a.end(), [](pii a, pii b) {
-        
-    });
+
+    int cur = 0;
+    for (auto [pos, cnt] : mp)
+    {
+        if (cur == 0)
+        {
+            res += max(0ll, pos.fi - pre);
+        }
+
+        cur -= pos.se * cnt;
+        pre = max(pre, pos.fi);
+    }
+
+    cout << res;
 }
 
 signed main()
