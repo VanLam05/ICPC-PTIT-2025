@@ -82,16 +82,16 @@ public:
 
         if (lazy[id] == 1)
             tree[id] = Node(r - l + 1, r - l + 1, r - l + 1, true);
+
         if (lazy[id] == -1)
-        {
             tree[id] = Node(0, 0, 0, false);
-        }
 
         if (l != r)
         {
-            lazy[id << 1] += lazy[id];
-            lazy[id << 1 | 1] += lazy[id];
+            lazy[id << 1] = lazy[id];
+            lazy[id << 1 | 1] = lazy[id];
         }
+
         lazy[id] = 0;
     }
 
@@ -105,9 +105,8 @@ public:
 
         res.suf = b.suf;
         if (b.full)
-        {
             res.suf += a.suf;
-        }
+
         res.sum = max({a.sum, b.sum, a.suf + b.pre});
         res.full = a.full && b.full;
         return res;
@@ -133,27 +132,15 @@ public:
         tree[id] = Merge(tree[id << 1], tree[id << 1 | 1]);
     }
 
-    Node get(int id, int l, int r, int u, int v)
-    {
-        push(id, l, r);
-        if (l > v || r < u)
-            return Node(0, 0, 0, true);
-
-        if (l >= u && r <= v)
-            return tree[id];
-
-        int mid = (l + r) >> 1;
-        Node left = get(id << 1, l, mid, u, v);
-        Node right = get(id << 1 | 1, mid + 1, r, u, v);
-        return Merge(left, right);
-    }
-
     int getFirstInd(int k)
     {
         Node cur = Node(0, 0, 0, true);
 
+        if (tree[1].sum < k)
+            return -1;
+
         int id = 1;
-        int l = 1, r = n, ans = -1;
+        int l = 1, r = n;
 
         while (l < r)
         {
@@ -165,17 +152,15 @@ public:
             {
                 id = id << 1;
                 r = mid;
-                ans = mid;
             }
             else
             {
                 cur = tmp;
                 id = id << 1 | 1;
-                push(id, mid + 1, r);
                 l = mid + 1;
             }
         }
-        return ans;
+        return r;
     }
 };
 
@@ -207,26 +192,16 @@ inline void _VanLam_()
             }
             int ind = seg.getFirstInd(k);
 
-            debug(k, ind);
-            debug(seg.get(1, 1, n, 1, ind).sum);
             if (ind == -1)
-            {
                 res++;
-            }
             else
-            {
                 seg.update(1, 1, n, ind - k + 1, ind, -1);
-                debug(seg.get(1, 1, n, 1, ind).sum);
-            }
         }
         else if (type == 'L')
         {
             int l, r;
             cin >> l >> r;
-            if (l > r)
-            {
-                swap(l, r);
-            }
+
             seg.update(1, 1, n, l, r, 1);
         }
     }

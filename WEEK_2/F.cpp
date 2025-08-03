@@ -50,7 +50,7 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 
 #define int ll
 
-const int INF = 1e18 + 7;
+const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
 const int maxN = 1e6 + 5;
 
@@ -69,26 +69,32 @@ inline void _VanLam_()
     FOR(i, 1, n)
     cin >> B[i];
 
-    vvi dp(n + 1, vi(n + 1, INF));
-    dp[0][0] = 1;
-
-    FOR(i, 0, n - 1)
+    int tot = 0;
+    FOR(i, 1, n)
     {
-        FOR(k, 0, i)
-        {
-            if (dp[i][k] == INF)
-                continue;
+        tot += A[i];
+    }
 
-            dp[i + 1][k] = min(dp[i + 1][k], dp[i][k] + A[i + 1]);
-            dp[i + 1][k + 1] = min(dp[i + 1][k + 1], dp[i][k]);
+    vvi dp(n + 1, vi(tot + 1, -INF));
+    dp[0][0] = 0;
+
+    FOR(i, 1, n)
+    {
+        FORD(k, i - 1, 0)
+        {
+            FORD(j, tot, 0)
+            {
+                int newJ = min(tot, j + B[i]);
+                dp[k + 1][newJ] = max(dp[k + 1][newJ], dp[k][j] + A[i]);
+            }
         }
     }
 
-    FOR(k, 1, n)
+    FOR(k, 0, n)
     {
-        if (dp[n][k] != INF)
+        if (dp[k][tot] > 0)
         {
-            cout << k << " " << dp[n][k] << "\n";
+            cout << k << " " << tot - dp[k][tot] << "\n";
             return;
         }
     }
