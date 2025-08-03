@@ -64,7 +64,7 @@ public:
     struct Point
     {
         double x, y;
-        
+
         Point(int x, int y)
         {
             this->x = x;
