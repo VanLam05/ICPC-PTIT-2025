@@ -63,7 +63,7 @@ class HalfEdge
 public:
     struct Point
     {
-        double x, y;
+        int x, y;
 
         Point(int x, int y)
         {
