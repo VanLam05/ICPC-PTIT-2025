@@ -48,7 +48,7 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 #define gcd(a, b) __gcd(a, b)
 #endif
 
-// #define int ll
+#define int ll
 
 const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
@@ -58,45 +58,88 @@ inline void prepare()
 {
 }
 
-bool check(const vi &a, int tot)
-{
-    if (tot != a[0] + a[2] + a[5] + a[7])
-        return false;
-    if (tot != a[0] + a[3] + a[6] + a[10])
-        return false;
-    if (tot != a[1] + a[2] + a[3] + a[4])
-        return false;
-    if (tot != a[7] + a[8] + a[9] + a[10])
-        return false;
-    if (tot != a[1] + a[5] + a[8] + a[11])
-        return false;
-    if (tot != a[4] + a[6] + a[9] + a[11])
-        return false;
-    return true;
-}
+int tot, res;
+vi a(12), tmp(12);
+vb used(12);
 
-int tot = 0;
-vi a(12);
+void backTrack(int pos)
+{
+    if (pos == 12)
+    {
+        res++;
+        return;
+    }
+
+    FOR(i, 0, 11)
+    {
+        if (used[i])
+            continue;
+
+        tmp[pos] = a[i];
+        used[i] = true;
+
+        if (pos == 3)
+        {
+            if (tmp[0] + tmp[1] + tmp[2] + tmp[3] == tot)
+            {
+                backTrack(pos + 1);
+            }
+        }
+        else if (pos == 6)
+        {
+            if (tmp[0] + tmp[4] + tmp[5] + tmp[6] == tot)
+            {
+                backTrack(pos + 1);
+            }
+        }
+        else if (pos == 8)
+        {
+            if (tmp[7] + tmp[1] + tmp[4] + tmp[8] == tot)
+            {
+                backTrack(pos + 1);
+            }
+        }
+        else if (pos == 10)
+        {
+            if (tmp[3] + tmp[9] + tmp[10] + tmp[6] == tot)
+            {
+                backTrack(pos + 1);
+            }
+        }
+        else if (pos == 11)
+        {
+            if (tmp[7] + tmp[2] + tmp[9] + tmp[11] == tot && tmp[8] + tmp[5] + tmp[10] + tmp[11] == tot)
+            {
+                backTrack(pos + 1);
+            }
+        }
+        else
+        {
+            backTrack(pos + 1);
+        }
+
+        used[i] = false;
+    }
+}
 
 inline void _VanLam_()
 {
+    fill(used.begin(), used.end(), false);
+    tot = 0, res = 0;
+    FOR(i, 0, 11)
+    {
+        cin >> a[i];
+        tot += a[i];
+    }
 
     if (tot % 3 != 0)
     {
-        cout << 0;
+        cout << 0 << '\n';
         return;
     }
     tot /= 3;
-    sort(all(a));
-    int res = 0;
-    if (check(a, tot))
-        res++;
-    while (next_permutation(all(a)))
-    {
-        if (check(a, tot))
-            res++;
-    }
-    cout << res << '\n';
+    backTrack(0);
+    cout << res / 12 << '\n';
 }
 
 signed main()
@@ -114,17 +157,10 @@ signed main()
     prepare();
 
     int Case = 1;
-    // cin >> Case;
+    cin >> Case;
     while (Case--)
     {
         cer("- - - -", Case, "- - - -");
-        FOR(i, 0, 11)
-        {
-            cin >> a[i];
-            tot += a[i];
-        }
-        if (tot == 0)
-            break;
         _VanLam_();
         cer("= = = = = = = = = =");
     }
