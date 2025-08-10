@@ -58,9 +58,10 @@ inline void prepare()
 {
 }
 
-bool check(const vi &a)
+bool check(const vi &a, int tot)
 {
-    int tot = a[0] + a[2] + a[5] + a[7];
+    if (tot != a[0] + a[2] + a[5] + a[7])
+        return false;
     if (tot != a[0] + a[3] + a[6] + a[10])
         return false;
     if (tot != a[1] + a[2] + a[3] + a[4])
@@ -74,20 +75,25 @@ bool check(const vi &a)
     return true;
 }
 
+int tot = 0;
+vi a(12);
+
 inline void _VanLam_()
 {
-    vi a(12);
-    FOR(i, 0, 11)
+
+    if (tot % 3 != 0)
     {
-        cin >> a[i];
+        cout << 0;
+        return;
     }
+    tot /= 3;
     sort(all(a));
     int res = 0;
-    if (check(a))
+    if (check(a, tot))
         res++;
     while (next_permutation(all(a)))
     {
-        if (check(a))
+        if (check(a, tot))
             res++;
     }
     cout << res << '\n';
@@ -112,6 +118,13 @@ signed main()
     while (Case--)
     {
         cer("- - - -", Case, "- - - -");
+        FOR(i, 0, 11)
+        {
+            cin >> a[i];
+            tot += a[i];
+        }
+        if (tot == 0)
+            break;
         _VanLam_();
         cer("= = = = = = = = = =");
     }

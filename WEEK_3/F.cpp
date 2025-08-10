@@ -66,20 +66,20 @@ inline void prepare()
             prime[i] = i;
             Primes.push_back(i);
             mobius[i] = -1;
-
-            for (int p : Primes)
+        }
+        
+        for (int p : Primes)
+        {
+            if (p * i >= maxN)
+                break;
+            prime[p * i] = p;
+            if (i % p == 0)
             {
-                if (p * i >= maxN)
-                    break;
-                prime[p * i] = p;
-                if (i % p == 0)
-                {
-                    mobius[p * i] = 0;
-                    break;
-                }
-                else
-                    mobius[p * i] = -mobius[i];
+                mobius[p * i] = 0;
+                break;
             }
+            else
+                mobius[p * i] = -mobius[i];
         }
     }
 }
@@ -110,6 +110,7 @@ inline void _VanLam_()
         {
             left[i] = (L[i] + d - 1) / d;
             right[i] = R[i] / d;
+
             if (left[i] > right[i])
             {
                 flg = false;
@@ -120,10 +121,10 @@ inline void _VanLam_()
             sumC += C[i];
         }
 
-        if (!flg || S < base)
-            continue;
-
         S = min(S - base, sumC);
+
+        if (!flg || S < 0)
+            continue;
 
         vi cur(S + 1, 0), nDP(S + 1, 0);
         cur[0] = 1;
@@ -132,9 +133,9 @@ inline void _VanLam_()
         {
             vi pre(S + 1);
             pre[0] = cur[0];
-            FOR(i, 1, S)
+            FOR(s, 1, S)
             {
-                pre[i] = (pre[i - 1] + cur[i]) % MOD;
+                pre[s] = (pre[s - 1] + cur[s]) % MOD;
             }
 
             FOR(s, 0, S)
@@ -155,6 +156,7 @@ inline void _VanLam_()
         {
             (ans += cur[s]) %= MOD;
         }
+
         if (mobius[d] == 1)
             (res += ans) %= MOD;
         else
