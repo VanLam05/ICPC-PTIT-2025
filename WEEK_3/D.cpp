@@ -48,9 +48,9 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 #define gcd(a, b) __gcd(a, b)
 #endif
 
-// #define int ll
+#define int ll
 
-const int INF = 1e9 + 7;
+const int INF = 2e9 + 7;
 const int MOD = 1e9 + 7;
 const int maxN = 1e6 + 5;
 
