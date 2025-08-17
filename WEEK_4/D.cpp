@@ -110,12 +110,10 @@ inline void _VanLam_()
         }
         else
         {
-            debug(u, sol[u]);
             if (u == 1 || sz[u] == 1)
                 continue;
 
             auto [_, solu] = *sol[u].begin();
-            debug(solu);
 
             sol[par[u]].erase(sol[par[u]].lower_bound({-sz[u], u}));
 

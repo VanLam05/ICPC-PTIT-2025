@@ -83,7 +83,9 @@ inline void _VanLam_()
         {
             if (H[i][j] == 0)
                 continue;
+
             res += 2;
+            
             FOR(dir, 0, 3)
             {
                 int ni = i + dx[dir];

@@ -80,7 +80,7 @@ inline void _VanLam_()
 
     int res = 0;
     int i = 0;
-    while (int tot = sum(N) > S)
+    while (sum(N) > S)
     {
         int digit = N % 10;
         res += (10 - digit) * pow10[i];
