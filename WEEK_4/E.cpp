@@ -1,1 +1,1 @@
-// "No Have Solution"
+// "Don't have solution"
