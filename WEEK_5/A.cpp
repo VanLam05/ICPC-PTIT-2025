@@ -52,102 +52,104 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 
 const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
-const int maxN = 1e6 + 5;
+const int maxN = 6e5 + 5;
 const int mxLog = 25;
 
 inline void prepare()
 {
 }
 
-struct Node
+int getBit(int mask, int pos)
 {
-    Node *child[2];
-    int cnt;
+    return (mask >> pos) & 1;
+}
 
-    Node()
+class BinaryTrie
+{
+public:
+    struct Node
     {
-        child[0] = child[1] = nullptr;
-        cnt = 0;
+        Node *child[2];
+        Node()
+        {
+            child[0] = child[1] = nullptr;
+        }
+    };
+
+    Node *root;
+    int totXor;
+
+    BinaryTrie()
+    {
+        root = new Node();
+        totXor = 0;
+    }
+
+    void insert(int num)
+    {
+        Node *cur = root;
+        FORD(bit, mxLog - 1, 0)
+        {
+            int idx = getBit(num, bit);
+            if (!cur->child[idx])
+            {
+                cur->child[idx] = new Node();
+            }
+            cur = cur->child[idx];
+        }
+    }
+
+    int getMex()
+    {
+        int mex = 0;
+        Node *cur = root;
+        FORD(bit, mxLog - 1, 0)
+        {
+            int idx = getBit(totXor, bit);
+            mex <<= 1;
+
+            if (cur->child[idx])
+            {
+                cur = cur->child[idx];
+            }
+            else
+            {
+                mex |= 1;
+                cur = cur->child[1 - idx];
+            }
+        }
+        return mex;
     }
 };
 
-int n, q, curXor;
-
-int getBit(int n, int pos)
-{
-    return (n >> pos) & 1;
-}
-
-void insert(Node *&root, int val, int bit)
-{
-    if (!root)
-        root = new Node();
-
-    root->cnt++;
-
-    if (bit < 0)
-    {
-        return;
-    }
-
-    int idx = getBit(val, bit);
-    insert(root->child[idx], val, bit - 1);
-}
-
-int findMex(Node *root)
-{
-    int mex = 0, curBit;
-
-    for (curBit = mxLog; curBit >= 0 && root != nullptr; curBit--)
-    {
-        Node *ZERO = root->child[getBit(curXor, curBit)];
-        Node *ONE = root->child[1 ^ getBit(curXor, curBit)];
-
-        mex <<= 1;
-        int need = 1 << curBit;
-
-        if (ZERO == nullptr || ZERO->cnt < need)
-        {
-            root = ZERO;
-        }
-        else
-        {
-            mex |= 1;
-            root = ONE;
-        }
-    }
-
-    debug(mex, curBit);
-    mex <<= (curBit + 1);
-
-    return mex;
-}
-
 bool vis[maxN];
-
 inline void _VanLam_()
 {
+    int n, q;
     cin >> n >> q;
 
-    Node *root = new Node();
     FOR(i, 1, n)
     {
-        int x;
-        cin >> x;
+        int num;
+        cin >> num;
+        vis[num] = true;
+    }
 
-        if (vis[x])
+    BinaryTrie binTrie;
+
+    FOR(i, 0, maxN - 1)
+    {
+        if (vis[i])
             continue;
-
-        vis[x] = true;
-        insert(root, x, mxLog);
+        binTrie.insert(i);
     }
 
     while (q--)
     {
         int x;
         cin >> x;
-        curXor ^= x;
-        cout << findMex(root) << '\n';
+        binTrie.totXor ^= x;
+        cout << binTrie.getMex() << '\n';
     }
 }
 
