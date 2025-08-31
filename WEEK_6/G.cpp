@@ -1,3 +1,4 @@
+// https://atcoder.jp/contests/tenka1-2019/tasks/tenka1_2019_e
 // #pragma GCC optimize("O3,unroll-loops")
 // #pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
 
