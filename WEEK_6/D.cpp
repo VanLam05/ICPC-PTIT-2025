@@ -56,11 +56,12 @@ const int maxN = 2e6 + 5;
 
 int bPow(int n, int k, int mod = MOD)
 {
-    if (k <= 0)
+    if (k == 0)
         return 1;
 
-    int res = bPow(n, k >> 1, mod);
+    int res = bPow(n, k / 2, mod);
     res = res * res % mod;
+
     if (k & 1)
         res = res * n % mod;
     return res;
@@ -82,6 +83,13 @@ inline void prepare()
     }
 }
 
+int P(int n, int k)
+{
+    if (k < 0 || k > n)
+        return 0;
+    return Fact[n] * invFact[n - k] % MOD;
+}
+
 int C(int n, int k)
 {
     if (k < 0 || k > n)
@@ -96,15 +104,35 @@ inline void _VanLam_()
 
     int res = 0;
 
-    FOR(i, 0, n - 2)
+    int invN = 0;
+    if (n % MOD != 0)
+        invN = bPow(n % MOD, MOD - 2);
+
+    FOR(d, 1, n - 1)
     {
-        int tmp1 = C(n - 2, i) * C(m - 1, i) % MOD;
-        int tmp2 = (i + 2) * bPow(n - i - 2, n - i - 2 - i + 2 - 1) % MOD;
-        (tmp2 *= bPow(m, n - i - 3)) %= MOD;
-        (res += tmp1 * tmp2 % MOD) %= MOD;
+        int expN = n - d - 2;
+        int powNterm;
+        if (expN >= 0)
+            powNterm = bPow(n % MOD, expN);
+        else
+            powNterm = invN;
+
+        int tmp1 = P(n - 2, d - 1) * (d + 1) % MOD;
+        tmp1 = tmp1 * powNterm % MOD;
+
+        int expM = n - d - 1;
+        int powMterm = 0;
+        if (expM >= 0)
+            powMterm = bPow(m % MOD, expM);
+
+        int tmp2 = C(m - 1, d - 1) * powMterm % MOD;
+
+        res += tmp1 * tmp2 % MOD;
+        if (res >= MOD)
+            res -= MOD;
     }
 
-    cout << res;
+    cout << res << '\n';
 }
 
 signed main()
