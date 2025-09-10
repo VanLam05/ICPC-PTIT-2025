@@ -1,4 +1,4 @@
-// Authors: Trà Cũ Vị Sưa
+// Author: Tiến Khôi (500M)
 #include <bits/stdc++.h>
 // #define int long long
 #define FOR(i, a, b) for (int i = (a); i <= (b); i++)
