@@ -52,26 +52,51 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 
 const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
-const int maxN = 1e6 + 5;
+const int maxN = 20;
 
 inline void prepare()
 {
 }
 
+int n;
+int c[maxN][maxN], dp[1 << maxN];
+
+int getBit(int mask, int pos)
+{
+    return (mask >> pos) & 1;
+}
+
 inline void _VanLam_()
 {
-    int n;
     cin >> n;
-    string s;
-    cin >> s;
+    FOR(i, 0, n - 1)
+    {
+        FOR(j, i + 1, n - 1)
+        {
+            cin >> c[i][j];
+            c[j][i] = c[i][j];
+        }
+    }
 
     int res = 0;
-    for (int cnt = 1, i = 1; i < n; i++)
+
+    FOR(mask, 0, (1 << n) - 1)
     {
-        if (s[i] == s[i - 1])
-            res += cnt++;
-        else
-            cnt = 1;
+        FOR(u, 0, n - 1)
+        {
+            if (getBit(mask, u))
+                continue;
+
+            FOR(v, u + 1, n - 1)
+            {
+                if (getBit(mask, v))
+                    continue;
+
+                int nMask = mask | (1 << u) | (1 << v);
+                dp[nMask] = max(dp[nMask], dp[mask] + c[u][v]);
+                res = max(res, dp[nMask]);
+            }
+        }
     }
 
     cout << res;

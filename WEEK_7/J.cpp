@@ -48,8 +48,6 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 #define gcd(a, b) __gcd(a, b)
 #endif
 
-#define int ll
-
 const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
 const int maxN = 1e6 + 5;
@@ -58,23 +56,38 @@ inline void prepare()
 {
 }
 
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace __gnu_pbds;
+typedef tree<int, null_type, greater<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
+typedef tree<int, null_type, greater_equal<int>, rb_tree_tag, tree_order_statistics_node_update> multi_ordered_set;
+
+// st.find_by_order(x): The x^th element in the set, equivalent to st[x].
+// st.order_of_key(x): Number of elements strictly less than x in the set.
+
+#define int ll
+
+int n, a[maxN];
+
 inline void _VanLam_()
 {
-    int n;
     cin >> n;
-    string s;
-    cin >> s;
 
+    ordered_set os;
     int res = 0;
-    for (int cnt = 1, i = 1; i < n; i++)
+    FOR(i, 1, n)
     {
-        if (s[i] == s[i - 1])
-            res += cnt++;
-        else
-            cnt = 1;
+        cin >> a[i];
+        res += os.order_of_key(a[i]);
+        os.insert(a[i]);
     }
 
-    cout << res;
+    FOR(i, 1, n)
+    {
+        cout << res << '\n';
+        res += n - 2 * a[i] - 1;
+    }
 }
 
 signed main()

@@ -32,10 +32,8 @@ using namespace std;
 #define YesNo Yes else No
 #define NoYes No else Yes
 
-template <class T>
-using min_heap = priority_queue<T, vector<T>, greater<T>>;
-template <class T>
-using max_heap = priority_queue<T, vector<T>, less<T>>;
+template <class T> using min_heap = priority_queue<T, vector<T>, greater<T>>;
+template <class T> using max_heap = priority_queue<T, vector<T>, less<T>>;
 
 #ifdef VanLam
 #include <VanLam.h>
@@ -48,7 +46,7 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 #define gcd(a, b) __gcd(a, b)
 #endif
 
-#define int ll
+// #define int ll
 
 const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
@@ -60,21 +58,6 @@ inline void prepare()
 
 inline void _VanLam_()
 {
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-
-    int res = 0;
-    for (int cnt = 1, i = 1; i < n; i++)
-    {
-        if (s[i] == s[i - 1])
-            res += cnt++;
-        else
-            cnt = 1;
-    }
-
-    cout << res;
 }
 
 signed main()
@@ -92,7 +75,7 @@ signed main()
     prepare();
 
     int Case = 1;
-    // cin >> Case;
+    cin >> Case;
     while (Case--)
     {
         cer("- - - -", Case, "- - - -");

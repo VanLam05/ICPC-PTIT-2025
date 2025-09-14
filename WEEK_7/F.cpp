@@ -48,7 +48,7 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 #define gcd(a, b) __gcd(a, b)
 #endif
 
-#define int ll
+// #define int ll
 
 const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
@@ -63,18 +63,32 @@ inline void _VanLam_()
     int n;
     cin >> n;
     string s;
-    cin >> s;
-
-    int res = 0;
-    for (int cnt = 1, i = 1; i < n; i++)
+    FOR(i, 1, n)
     {
-        if (s[i] == s[i - 1])
-            res += cnt++;
+        char c;
+        cin >> c;
+        if (c == 'A')
+        {
+            s.push_back('B');
+            s.push_back('B');
+        }
         else
-            cnt = 1;
+        {
+            s.push_back(c);
+        }
     }
 
-    cout << res;
+    n = s.length();
+    FOR(i, 0, n - 1)
+    {
+        if (i < n - 1 && s[i] == 'B' && s[i + 1] == 'B')
+        {
+            cout << 'A';
+            i++;
+        }
+        else
+            cout << s[i];
+    }
 }
 
 signed main()

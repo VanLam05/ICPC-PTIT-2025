@@ -48,7 +48,7 @@ using max_heap = priority_queue<T, vector<T>, less<T>>;
 #define gcd(a, b) __gcd(a, b)
 #endif
 
-#define int ll
+// #define int ll
 
 const int INF = 1e9 + 7;
 const int MOD = 1e9 + 7;
@@ -58,23 +58,57 @@ inline void prepare()
 {
 }
 
+int n, a[maxN], b[maxN];
 inline void _VanLam_()
 {
-    int n;
     cin >> n;
-    string s;
-    cin >> s;
-
-    int res = 0;
-    for (int cnt = 1, i = 1; i < n; i++)
+    FOR(i, 1, n)
     {
-        if (s[i] == s[i - 1])
-            res += cnt++;
-        else
-            cnt = 1;
+        cin >> a[i];
+    }
+    FOR(i, 1, n)
+    {
+        cin >> b[i];
     }
 
-    cout << res;
+    queue<int> pos;
+    FOR(i, 1, n)
+    {
+        if (a[i] == b[i])
+            pos.push(i);
+    }
+
+    while (!pos.empty())
+    {
+        int ind = pos.front();
+        pos.pop();
+
+        if (ind - 2 >= 1 && a[ind - 1] != b[ind - 1])
+        {
+            if (a[ind - 2] + a[ind] - a[ind - 1] == b[ind - 1])
+            {
+                a[ind - 1] = b[ind - 1];
+                pos.push(ind - 1);
+            }
+        }
+
+        if (ind + 2 <= n && a[ind + 1] != b[ind + 1])
+        {
+            if (a[ind + 2] + a[ind] - a[ind + 1] == b[ind + 1])
+            {
+                a[ind + 1] = b[ind + 1];
+                pos.push(ind + 1);
+            }
+        }
+    }
+
+    bool flg = true;
+    FOR(i, 1, n)
+    if (a[i] != b[i])
+        flg = false;
+
+    if (flg)
+        YesNo;
 }
 
 signed main()
