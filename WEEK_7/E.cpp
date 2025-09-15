@@ -1,138 +1,75 @@
-// #pragma GCC optimize("O3,unroll-loops")
-// #pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
-
+// Author: Tiến Khôi (500M)
 #include <bits/stdc++.h>
-using namespace std;
-
+// #define int long long
+#define FOR(i, a, b) for (int i = (a); i <= (b); i++)
+#define FOD(i, a, b) for (int i = (a); i >= (b); i--)
+#define bit(x, y) ((x) >> (y)) & 1
+#define pb push_back
 #define ll long long
-#define fi first
-#define se second
-#define vi vector<int>
-#define vb vector<bool>
-#define vc vector<char>
-#define pii pair<int, int>
-#define mii map<int, int>
-#define mib map<int, bool>
-#define vvi vector<vi>
-#define vvb vector<vb>
-#define vvc vector<vc>
-#define vpi vector<pii>
-#define vvpi vector<vpi>
-#define all(x) (x).begin(), (x).end()
-#define rall(x) (x).rbegin(), (x).rend()
-#define sub(x, l, r) (x).begin() + l, (x).begin() + r
-#define rsub(x, l, r) (x).rbegin() + l, (x).rbegin() + r
-#define FOR(i, a, b) for (int i = a, _b = b; i <= _b; i++)
-#define FORD(i, a, b) for (int i = a, _b = b; i >= _b; i--)
-
-#define lcm(a, b) a / gcd(a, b) * b
-
-#define Yes cout << "Yes\n";
-#define No cout << "No\n";
-#define YesNo Yes else No
-#define NoYes No else Yes
-
-template <class T>
-using min_heap = priority_queue<T, vector<T>, greater<T>>;
-template <class T>
-using max_heap = priority_queue<T, vector<T>, less<T>>;
-
-#ifdef VanLam
-#include <VanLam.h>
-#define cer(...) debug_out(__VA_ARGS__)
-#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
-#define __gcd(a, b) gcd(a, b)
-#else
-#define cer(...) 20
-#define debug(...) 12
-#define gcd(a, b) __gcd(a, b)
-#endif
-
-// #define int ll
-
-const int INF = 1e9 + 7;
-const int MOD = 1e9 + 7;
-const int maxN = 1e6 + 5;
-
-inline void prepare()
+#define ii pair<int, int>
+#define f first
+#define s second
+#define M 1000000007
+using namespace std;
+const int INF = 0x3f3f3f3f;
+const int N = 2e5 + 5;
+void Inp()
 {
-}
-
-int n, a[maxN], b[maxN];
-inline void _VanLam_()
-{
-    cin >> n;
-    FOR(i, 1, n)
-    {
-        cin >> a[i];
-    }
-    FOR(i, 1, n)
-    {
-        cin >> b[i];
-    }
-
-    queue<int> pos;
-    FOR(i, 1, n)
-    {
-        if (a[i] == b[i])
-            pos.push(i);
-    }
-
-    while (!pos.empty())
-    {
-        int ind = pos.front();
-        pos.pop();
-
-        if (ind - 2 >= 1 && a[ind - 1] != b[ind - 1])
-        {
-            if (a[ind - 2] + a[ind] - a[ind - 1] == b[ind - 1])
-            {
-                a[ind - 1] = b[ind - 1];
-                pos.push(ind - 1);
-            }
-        }
-
-        if (ind + 2 <= n && a[ind + 1] != b[ind + 1])
-        {
-            if (a[ind + 2] + a[ind] - a[ind + 1] == b[ind + 1])
-            {
-                a[ind + 1] = b[ind + 1];
-                pos.push(ind + 1);
-            }
-        }
-    }
-
-    bool flg = true;
-    FOR(i, 1, n)
-    if (a[i] != b[i])
-        flg = false;
-
-    if (flg)
-        YesNo;
-}
-
-signed main()
-{
-    ios::sync_with_stdio(0);
+    ios_base::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
-
-    if (fopen("VanLam.inp", "r"))
+    if (fopen(".inp", "r"))
     {
-        freopen("VanLam.inp", "r", stdin);
-        freopen("VanLam.out", "w", stdout);
+        freopen(".inp", "r", stdin);
+        freopen(".out", "w", stdout);
     }
-
-    prepare();
-
+}
+int a[N], b[N];
+int n;
+bool dq(int i, int x) {
+    if (i >= n) return false;
+    if (a[i - 1] + a[i + 1] - a[i] == x) {
+        a[i] = x;
+        return true;
+    }
+    bool check = dq(i + 1, x + a[i] - a[i - 1]);
+    if (check) {
+        a[i] = x;
+        return true;
+    }
+    return false;
+}
+void solve()
+{
+    cin >> n;
+    FOR(i, 1, n) cin >> a[i];
+    FOR(i, 1, n) cin >> b[i];
+    if (a[1] != b[1] || a[n] != b[n]) {
+        cout << "No";
+        return;
+    }
+    FOR(i, 2, n - 1) {
+        int need;
+        if (a[i] == b[i]) continue;
+        else {
+            bool check = dq(i, b[i]);
+            if (!check) {
+                cout << "No";
+                return;
+            } else {
+                cout << "Yes";
+                return;
+            }
+        }
+    }
+    return;
+}
+signed main()
+{
+    Inp();
     int Case = 1;
-    // cin >> Case;
+    //cin >> Case;
     while (Case--)
-    {
-        cer("- - - -", Case, "- - - -");
-        _VanLam_();
-        cer("= = = = = = = = = =");
-    }
-
+        solve();
     return 0;
 }
